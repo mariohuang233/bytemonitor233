@@ -36,6 +36,7 @@ COPY 1.py ./
 ENV PYTHONPATH=/app
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
+ENV CRAWLER_SCRIPT_PATH=/app/1.py
 
 # 暴露端口
 EXPOSE 5000
