@@ -105,7 +105,13 @@ def create_app():
     CORS(app, resources={r"/api/*": {"origins": CORS_ORIGINS}})
     
     # 初始化数据库服务
-    logger.info(f"连接MongoDB: {MONGO_URI}")
+    # 验证MongoDB URI
+    if not MONGO_URI or not MONGO_URI.startswith(('mongodb://', 'mongodb+srv://')):
+        logger.error(f"❌ 无效的MongoDB URI: '{MONGO_URI}'")
+        logger.error("请检查环境变量 MONGO_URI 是否正确设置")
+        raise ValueError(f"Invalid MongoDB URI: '{MONGO_URI}'")
+    
+    logger.info(f"连接MongoDB: {MONGO_URI[:50]}...")  # 只显示前50个字符，避免泄露完整URI
     db_service = DatabaseService(MONGO_URI, MONGO_DB_NAME)
     
     # 初始化导入服务
