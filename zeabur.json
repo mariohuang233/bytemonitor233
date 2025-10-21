@@ -1,0 +1,15 @@
+{
+  "name": "ByteDance Job Monitor",
+  "description": "丝瓜清单管理系统 - 字节跳动职位监控",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "environment": {
+    "MONGO_URI": "${MONGO_URI}",
+    "MONGO_DB_NAME": "paquzijie_sponge",
+    "SECRET_KEY": "${SECRET_KEY}",
+    "DEBUG": "False",
+    "CORS_ORIGINS": "*"
+  },
+  "port": 5001
+}

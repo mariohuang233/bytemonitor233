@@ -143,4 +143,7 @@ frontend/dist/
 
 # Local data files
 *.xlsx
-*.json
+backend_log.txt
+
+# Cache files (from crawler)
+bytedance_jobs_cache.json
