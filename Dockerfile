@@ -69,7 +69,7 @@ ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=0
 
 # 暴露端口
-EXPOSE 5000
+EXPOSE 5001
 
 # 启动命令
 CMD ["python", "app.py"]
