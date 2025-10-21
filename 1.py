@@ -2,6 +2,7 @@ import asyncio
 import hashlib
 import json
 import logging
+import os
 import subprocess
 import sys
 from datetime import datetime
@@ -502,7 +503,23 @@ class JobMonitor:
         
         # 异步抓取各类型丝瓜清单
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=self.headless)
+            # 浏览器启动配置（支持Docker环境）
+            launch_options = {
+                'headless': self.headless,
+                'args': [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-gpu',
+                ]
+            }
+            
+            # Docker环境中，Playwright可能需要明确的浏览器路径
+            # 检查环境变量 PLAYWRIGHT_BROWSERS_PATH
+            if os.getenv('PLAYWRIGHT_BROWSERS_PATH'):
+                logging.info(f"使用Playwright浏览器路径: {os.getenv('PLAYWRIGHT_BROWSERS_PATH')}")
+            
+            browser = await p.chromium.launch(**launch_options)
             tasks_to_run = [self._run_single_task_async(task, browser) for task in self.tasks]
             await asyncio.gather(*tasks_to_run)
             await browser.close()

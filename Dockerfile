@@ -46,10 +46,15 @@ COPY backend/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 安装Playwright浏览器（重要：必须在安装playwright包之后）
-# 使用--with-deps确保系统依赖也被安装
+# 设置浏览器安装路径
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+
+# 安装Chromium浏览器和依赖
 RUN playwright install chromium
 RUN playwright install-deps chromium
+
+# 验证安装（调试用）
+RUN playwright --version && ls -la /ms-playwright/ || echo "Playwright安装位置检查失败"
 
 # 复制后端代码
 COPY backend/ ./
