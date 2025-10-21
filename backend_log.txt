@@ -24,3 +24,10 @@
 2025-10-21 16:44:19,028 - __main__ - INFO - 启动Flask服务器...
 2025-10-21 16:44:19,074 - werkzeug - WARNING -  * Debugger is active!
 2025-10-21 16:44:19,100 - werkzeug - INFO -  * Debugger PIN: 807-792-011
+2025-10-21 16:46:55,116 - werkzeug - INFO -  * Detected change in '/Users/huangjiawei/Downloads/paquzijie/backend/app.py', reloading
+2025-10-21 16:46:55,618 - werkzeug - INFO -  * Restarting with stat
+2025-10-21 16:46:56,219 - __main__ - INFO - 连接MongoDB: mongodb+srv://byte123:fXb39P2JDuJA6U8S@yierbubu.aha67vc.mongodb.net/?retryWrites=true&w=majority&appName=yierbubu
+2025-10-21 16:46:57,341 - __main__ - INFO - Flask应用初始化完成
+2025-10-21 16:46:57,341 - __main__ - INFO - 启动Flask服务器...
+2025-10-21 16:46:57,379 - werkzeug - WARNING -  * Debugger is active!
+2025-10-21 16:46:57,396 - werkzeug - INFO -  * Debugger PIN: 807-792-011

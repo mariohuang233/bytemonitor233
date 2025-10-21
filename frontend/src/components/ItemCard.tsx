@@ -82,14 +82,23 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, onClick }) => {
             )}
           </div>
 
-          {/* 标题 */}
-          <Typography.Title level={5} style={{ margin: 0, fontSize: '16px' }}>
+          {/* 标题 - 加粗黑体，大字号 */}
+          <Typography.Title
+            level={5}
+            style={{
+              margin: 0,
+              fontSize: '20px',
+              fontWeight: 800,
+              color: '#1a1a1a',
+              lineHeight: 1.3,
+            }}
+          >
             {item.title}
           </Typography.Title>
 
           {/* 副标题 */}
           {item.sub_title && (
-            <Text type="secondary" style={{ fontSize: '13px' }}>
+            <Text type="secondary" style={{ fontSize: '14px', lineHeight: 1.5 }}>
               {item.sub_title}
             </Text>
           )}
@@ -104,41 +113,82 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, onClick }) => {
             </Paragraph>
           )}
 
-          {/* 底部信息 */}
-          <Space split={<span style={{ color: '#d9d9d9' }}>|</span>} size="small" wrap>
-            {item.采摘时间 && (
-              <Text type="secondary" style={{ fontSize: '12px' }}>
-                <ClockCircleOutlined /> {formatTime(item.采摘时间)}
-              </Text>
+          {/* 标签区 - pill样式 */}
+          <Space size={[8, 8]} wrap>
+            {item.job_category && (
+              <span
+                style={{
+                  background: '#f0f0f0',
+                  color: '#666',
+                  padding: '6px 14px',
+                  borderRadius: '16px',
+                  fontSize: '12px',
+                  fontWeight: 500,
+                }}
+              >
+                {item.job_category}
+              </span>
             )}
             {item.city_list && (
-              <Text type="secondary" style={{ fontSize: '12px' }}>
-                <EnvironmentOutlined /> {item.city_list}
-              </Text>
-            )}
-            {item.job_category && (
-              <Tag color="default" style={{ fontSize: '11px', margin: 0 }}>
-                {item.job_category}
-              </Tag>
+              <span
+                style={{
+                  background: '#f0f0f0',
+                  color: '#666',
+                  padding: '6px 14px',
+                  borderRadius: '16px',
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
+                <EnvironmentOutlined style={{ fontSize: '12px' }} />
+                {item.city_list}
+              </span>
             )}
           </Space>
 
-          {/* 申请按钮 */}
-          <div style={{ textAlign: 'center', paddingTop: '12px', borderTop: '1px solid #f0f0f0' }}>
+          {/* 最新更新时间 - 不明显显示 */}
+          {item.采摘时间 && (
+            <Text type="secondary" style={{ fontSize: '11px', opacity: 0.6 }}>
+              <ClockCircleOutlined style={{ marginRight: '4px' }} />
+              Updated {formatTime(item.采摘时间)}
+            </Text>
+          )}
+
+          {/* Apply now按钮 - 黑底白字 */}
+          <div style={{ paddingTop: '16px' }}>
             <Button
               type="primary"
-              size="small"
+              block
+              size="large"
               icon={<LinkOutlined />}
               onClick={handleApply}
-              style={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                border: 'none',
-                borderRadius: '6px',
-                fontWeight: 500,
-              }}
               disabled={!item.job_id}
+              style={{
+                background: '#1a1a1a',
+                border: 'none',
+                borderRadius: '12px',
+                height: '48px',
+                fontWeight: 600,
+                fontSize: '15px',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              }}
+              onMouseEnter={(e) => {
+                if (item.job_id) {
+                  e.currentTarget.style.background = '#333';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.2)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#1a1a1a';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
             >
-              立即申请
+              Apply Now
             </Button>
           </div>
         </Space>
