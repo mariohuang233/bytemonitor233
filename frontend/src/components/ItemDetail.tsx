@@ -79,7 +79,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ item, visible, onClose }) => {
         <Descriptions.Item label="类型" span={1}>
           <Tag color="blue">{item.type_name}</Tag>
         </Descriptions.Item>
-        <Descriptions.Item label="采摘时间" span={1}>
+        <Descriptions.Item label="检测到变化时间" span={1}>
           {formatTime(item.采摘时间)}
         </Descriptions.Item>
 

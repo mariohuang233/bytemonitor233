@@ -149,11 +149,11 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, onClick }) => {
             )}
           </Space>
 
-          {/* 最新更新时间 - 不明显显示 */}
+          {/* 采摘时间 - 最后一次检测到变化的时间 */}
           {item.采摘时间 && (
             <Text type="secondary" style={{ fontSize: '11px', opacity: 0.6 }}>
               <ClockCircleOutlined style={{ marginRight: '4px' }} />
-              Updated {formatTime(item.采摘时间)}
+              检测到变化 {formatTime(item.采摘时间)}
             </Text>
           )}
 
