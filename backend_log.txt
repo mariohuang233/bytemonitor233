@@ -17,3 +17,10 @@
 2025-10-21 16:43:46,191 - werkzeug - INFO - 127.0.0.1 - - [21/Oct/2025 16:43:46] "GET /health HTTP/1.1" 200 -
 2025-10-21 16:43:59,151 - werkzeug - INFO - 127.0.0.1 - - [21/Oct/2025 16:43:59] "GET /api/items?limit=3 HTTP/1.1" 200 -
 2025-10-21 16:44:06,164 - werkzeug - INFO - 127.0.0.1 - - [21/Oct/2025 16:44:06] "GET /api/stats HTTP/1.1" 200 -
+2025-10-21 16:44:17,492 - werkzeug - INFO -  * Detected change in '/Users/huangjiawei/Downloads/paquzijie/backend/config.py', reloading
+2025-10-21 16:44:17,641 - werkzeug - INFO -  * Restarting with stat
+2025-10-21 16:44:18,096 - __main__ - INFO - 连接MongoDB: mongodb+srv://byte123:fXb39P2JDuJA6U8S@yierbubu.aha67vc.mongodb.net/?retryWrites=true&w=majority&appName=yierbubu
+2025-10-21 16:44:19,028 - __main__ - INFO - Flask应用初始化完成
+2025-10-21 16:44:19,028 - __main__ - INFO - 启动Flask服务器...
+2025-10-21 16:44:19,074 - werkzeug - WARNING -  * Debugger is active!
+2025-10-21 16:44:19,100 - werkzeug - INFO -  * Debugger PIN: 807-792-011
