@@ -16,7 +16,7 @@ import {
   message,
   Progress,
 } from 'antd';
-import { SearchOutlined, SyncOutlined, BarChartOutlined, HomeOutlined } from '@ant-design/icons';
+import { SearchOutlined, SyncOutlined, BarChartOutlined } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import ItemCard from '../components/ItemCard';
 import ItemDetail from '../components/ItemDetail';
@@ -24,14 +24,13 @@ import Dashboard from '../components/Dashboard';
 import PageHeader from '../components/PageHeader';
 import { getItems, triggerSync, getSyncStatus, type SpongeItem } from '../services/api';
 import theme from '../styles/theme';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 const { TabPane } = Tabs;
 const { Search } = Input;
 
 const Home: React.FC = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<string>('all');
   const [searchKeyword, setSearchKeyword] = useState<string>('');
@@ -158,52 +157,6 @@ const Home: React.FC = () => {
   const handleItemClick = (item: SpongeItem) => {
     setSelectedItem(item);
     setDetailVisible(true);
-  };
-
-  // 渲染内容
-  const renderContent = () => {
-    if (showDashboard) {
-      return <Dashboard />;
-    }
-
-    if (loading) {
-      return (
-        <div style={{ textAlign: 'center', padding: '100px 0' }}>
-          <Spin size="large" />
-        </div>
-      );
-    }
-
-    if (items.length === 0) {
-      return (
-        <div style={{ padding: '100px 0' }}>
-          <Empty description="暂无数据" />
-        </div>
-      );
-    }
-
-    return (
-      <>
-        <Row gutter={[16, 16]}>
-          {items.map((item) => (
-            <Col key={item._id} xs={24} sm={12} lg={8} xl={6}>
-              <ItemCard item={item} onClick={() => handleItemClick(item)} />
-            </Col>
-          ))}
-        </Row>
-
-        <div style={{ textAlign: 'center', marginTop: '32px' }}>
-          <Pagination
-            current={page}
-            total={total}
-            pageSize={pageSize}
-            onChange={(newPage) => setPage(newPage)}
-            showSizeChanger={false}
-            showTotal={(total) => `共 ${total} 条`}
-          />
-        </div>
-      </>
-    );
   };
 
   return (
