@@ -1,7 +1,17 @@
+# Flask Web框架
 flask==3.0.0
 flask-cors==4.0.0
+
+# 数据库
 pymongo==4.6.0
+
+# 工具
 python-dotenv==1.0.0
 APScheduler==3.10.4
 pytz==2024.1
+
+# 爬虫脚本依赖
+openpyxl==3.1.2
+pandas==2.1.4
+playwright==1.40.0
 
