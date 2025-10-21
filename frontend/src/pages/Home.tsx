@@ -16,17 +16,23 @@ import {
   message,
   Progress,
 } from 'antd';
-import { SearchOutlined, SyncOutlined, BarChartOutlined } from '@ant-design/icons';
+import { SearchOutlined, SyncOutlined, BarChartOutlined, HomeOutlined } from '@ant-design/icons';
+import { motion, AnimatePresence } from 'framer-motion';
 import ItemCard from '../components/ItemCard';
 import ItemDetail from '../components/ItemDetail';
 import Dashboard from '../components/Dashboard';
+import PageHeader from '../components/PageHeader';
 import { getItems, triggerSync, getSyncStatus, type SpongeItem } from '../services/api';
+import theme from '../styles/theme';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const { Search } = Input;
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState<string>('all');
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [items, setItems] = useState<SpongeItem[]>([]);
@@ -39,6 +45,15 @@ const Home: React.FC = () => {
   const [syncing, setSyncing] = useState<boolean>(false);
   const [syncProgress, setSyncProgress] = useState<number>(0);
   const [showDashboard, setShowDashboard] = useState<boolean>(false);
+  
+  // 从URL参数获取搜索关键词
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const searchParam = params.get('search');
+    if (searchParam) {
+      setSearchKeyword(searchParam);
+    }
+  }, [location.search]);
 
   // 加载数据
   useEffect(() => {
@@ -192,93 +207,202 @@ const Home: React.FC = () => {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh', background: '#f5f7fa' }}>
-      {/* 头部 */}
-      <Header
-        style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          padding: '0 24px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-        }}
-      >
-        <h1 style={{ color: 'white', margin: 0, fontSize: '24px' }}>
-          🥒 丝瓜清单管理系统
-        </h1>
-
-        <Space>
-          <Button
-            icon={<BarChartOutlined />}
-            onClick={() => setShowDashboard(!showDashboard)}
-            style={{ color: 'white', borderColor: 'white' }}
-          >
-            {showDashboard ? '列表视图' : '统计视图'}
-          </Button>
-
-          <Button
-            type="primary"
-            icon={<SyncOutlined spin={syncing} />}
-            onClick={handleSync}
-            loading={syncing}
-            disabled={syncing}
-            style={{ background: '#52c41a', borderColor: '#52c41a' }}
-          >
-            {syncing ? `同步中 ${syncProgress}%` : '同步数据'}
-          </Button>
-        </Space>
-      </Header>
-
-      {/* 同步进度条 */}
-      {syncing && (
-        <Progress
-          percent={syncProgress}
-          status="active"
-          showInfo={false}
-          strokeColor={{ from: '#108ee9', to: '#87d068' }}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <Layout style={{ minHeight: '100vh', background: theme.colors.neutral.background }}>
+        {/* 统一头部 */}
+        <PageHeader
+          title="职位清单"
+          subtitle="探索精选职位机会"
+          showHome={true}
+          extra={
+            <Space>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  icon={<BarChartOutlined />}
+                  type={showDashboard ? 'primary' : 'default'}
+                  onClick={() => setShowDashboard(!showDashboard)}
+                  style={{
+                    borderRadius: theme.borderRadius.lg,
+                    transition: theme.transitions.base,
+                  }}
+                >
+                  {showDashboard ? '返回列表' : '数据统计'}
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  icon={<SyncOutlined spin={syncing} />}
+                  onClick={handleSync}
+                  loading={syncing}
+                  disabled={syncing}
+                  style={{
+                    borderRadius: theme.borderRadius.lg,
+                    transition: theme.transitions.base,
+                  }}
+                >
+                  同步数据
+                </Button>
+              </motion.div>
+            </Space>
+          }
         />
-      )}
+        
+        {/* 同步进度条 */}
+        <AnimatePresence>
+          {syncing && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              style={{ background: 'white', borderBottom: `1px solid ${theme.colors.neutral.border}` }}
+            >
+              <div style={{ maxWidth: '1200px', margin: '0 auto', padding: `${theme.spacing.sm} ${theme.spacing.lg}` }}>
+                <Progress
+                  percent={syncProgress}
+                  status={syncProgress === 100 ? 'success' : 'active'}
+                  strokeColor={theme.colors.primary.gradient}
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      {/* 内容区 */}
-      <Content style={{ padding: '24px' }}>
-        {!showDashboard && (
-          <>
-            {/* 搜索和标签 */}
-            <div style={{ marginBottom: '24px' }}>
-              <Search
-                placeholder="搜索标题、描述、要求..."
-                allowClear
-                enterButton={<SearchOutlined />}
-                size="large"
-                onSearch={handleSearch}
-                style={{ marginBottom: '16px' }}
-              />
+        {/* 主内容区 */}
+        <Content style={{ padding: theme.spacing.lg, maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
+          <AnimatePresence mode="wait">
+            {showDashboard ? (
+              <motion.div
+                key="dashboard"
+                {...theme.animations.fadeIn}
+                transition={{ duration: 0.4 }}
+              >
+                <Dashboard />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="list"
+                {...theme.animations.fadeIn}
+                transition={{ duration: 0.4 }}
+              >
+                {/* 搜索栏 */}
+                <motion.div
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.1 }}
+                  style={{ marginBottom: theme.spacing.lg }}
+                >
+                  <Search
+                    placeholder="搜索职位、技能、公司..."
+                    allowClear
+                    enterButton={<SearchOutlined />}
+                    size="large"
+                    onSearch={handleSearch}
+                    value={searchKeyword}
+                    onChange={(e) => setSearchKeyword(e.target.value)}
+                    style={{ 
+                      maxWidth: '600px',
+                    }}
+                  />
+                </motion.div>
 
-              <Tabs activeKey={activeTab} onChange={handleTabChange} size="large">
-                <TabPane tab="全部" key="all" />
-                <TabPane tab="🌱 新丝瓜" key="intern" />
-                <TabPane tab="🌿 生丝瓜" key="campus" />
-                <TabPane tab="🥒 熟丝瓜" key="experienced" />
-              </Tabs>
-            </div>
-          </>
-        )}
+                {/* 标签页 */}
+                <motion.div
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <Tabs 
+                    activeKey={activeTab} 
+                    onChange={handleTabChange} 
+                    size="large"
+                    style={{
+                      marginBottom: theme.spacing.lg,
+                    }}
+                  >
+                    <TabPane tab="全部" key="all" />
+                    <TabPane tab="新丝瓜（实习）" key="intern" />
+                    <TabPane tab="生丝瓜（校招）" key="campus" />
+                    <TabPane tab="熟丝瓜（社招）" key="experienced" />
+                  </Tabs>
+                </motion.div>
 
-        {/* 列表/仪表盘 */}
-        {renderContent()}
-      </Content>
+                {/* 内容展示 */}
+                <AnimatePresence mode="wait">
+                  {loading ? (
+                    <motion.div
+                      key="loading"
+                      {...theme.animations.fadeIn}
+                      style={{ textAlign: 'center', padding: '100px 0' }}
+                    >
+                      <Spin size="large" />
+                    </motion.div>
+                  ) : items.length === 0 ? (
+                    <motion.div
+                      key="empty"
+                      {...theme.animations.scale}
+                      style={{ padding: '100px 0' }}
+                    >
+                      <Empty description="暂无数据" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="content"
+                      variants={theme.animations.staggerContainer}
+                      initial="initial"
+                      animate="animate"
+                    >
+                      <Row gutter={[16, 16]}>
+                        {items.map((item, index) => (
+                          <Col key={item._id} xs={24} sm={12} lg={8} xl={6}>
+                            <motion.div
+                              variants={theme.animations.staggerItem}
+                              custom={index}
+                            >
+                              <ItemCard item={item} onClick={() => handleItemClick(item)} />
+                            </motion.div>
+                          </Col>
+                        ))}
+                      </Row>
 
-      {/* 详情模态框 */}
-      <ItemDetail
-        item={selectedItem}
-        visible={detailVisible}
-        onClose={() => {
-          setDetailVisible(false);
-          setSelectedItem(null);
-        }}
-      />
-    </Layout>
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        style={{ textAlign: 'center', marginTop: theme.spacing.xl }}
+                      >
+                        <Pagination
+                          current={page}
+                          total={total}
+                          pageSize={pageSize}
+                          onChange={(newPage) => setPage(newPage)}
+                          showSizeChanger={false}
+                          showTotal={(total) => `共 ${total} 条`}
+                        />
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </Content>
+
+        {/* 详情弹窗 */}
+        <ItemDetail
+          item={selectedItem}
+          visible={detailVisible}
+          onClose={() => {
+            setDetailVisible(false);
+            setSelectedItem(null);
+          }}
+        />
+      </Layout>
+    </motion.div>
   );
 };
 
