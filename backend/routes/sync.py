@@ -4,8 +4,12 @@ import subprocess
 import threading
 from datetime import datetime
 import logging
+import pytz
 
 logger = logging.getLogger(__name__)
+
+# 北京时区
+BEIJING_TZ = pytz.timezone('Asia/Shanghai')
 
 sync_bp = Blueprint('sync', __name__)
 
@@ -23,7 +27,7 @@ def init_routes(db_service, importer, crawler_script_path):
     def run_crawler_and_import():
         """运行爬虫并导入数据"""
         global sync_status
-        start_time = datetime.now()
+        start_time = datetime.now(BEIJING_TZ)
         
         try:
             sync_status['running'] = True
@@ -55,7 +59,7 @@ def init_routes(db_service, importer, crawler_script_path):
             sync_status['progress'] = 100
             
             # 记录同步日志
-            duration = (datetime.now() - start_time).total_seconds()
+            duration = (datetime.now(BEIJING_TZ) - start_time).total_seconds()
             db_service.add_sync_log({
                 'type': 'manual',
                 'status': 'success',
@@ -74,7 +78,7 @@ def init_routes(db_service, importer, crawler_script_path):
             sync_status['progress'] = 0
             
             # 记录失败日志
-            duration = (datetime.now() - start_time).total_seconds()
+            duration = (datetime.now(BEIJING_TZ) - start_time).total_seconds()
             db_service.add_sync_log({
                 'type': 'manual',
                 'status': 'failed',

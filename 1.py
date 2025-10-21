@@ -10,8 +10,12 @@ from typing import Dict, List, Set, Any
 
 import openpyxl
 import pandas as pd
+import pytz
 from openpyxl.styles import PatternFill
 from playwright.async_api import async_playwright, Browser
+
+# 北京时区
+BEIJING_TZ = pytz.timezone('Asia/Shanghai')
 
 # --- 1. 配置区 ---
 
@@ -217,7 +221,8 @@ class JobMonitor:
                     logging.debug(f"{sponge_type} 清单第一条详情: {json.dumps(job_list[0], ensure_ascii=False, indent=2)}")
                 
                 for job in job_list:
-                    publish_time = datetime.fromtimestamp(job["publish_time"] / 1000)
+                    # 将时间戳转换为北京时间
+                    publish_time = datetime.fromtimestamp(job["publish_time"] / 1000, tz=BEIJING_TZ)
                     
                     # 职位信息整理（保持原数据结构，不修改字段名避免功能异常）
                     job_info = {
@@ -283,7 +288,7 @@ class JobMonitor:
         """处理整理结果，合并新旧丝瓜条目并标记新条目"""
         final_data_frames: Dict[str, pd.DataFrame] = {}
         summary_info: List[Dict[str, Any]] = []
-        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        current_time = datetime.now(BEIJING_TZ).strftime("%Y-%m-%d %H:%M:%S")
         
         for sheet_name, task_name, new_jobs_data in self.results:
             sponge_type = self.job_to_sponge.get(task_name, task_name)
@@ -425,7 +430,7 @@ class JobMonitor:
             type_stats[sponge_type] = {'new': new_cnt, 'total': total_cnt}
             total_new += new_cnt
             total_count += total_cnt
-        current_time = datetime.now().strftime("%H:%M")
+        current_time = datetime.now(BEIJING_TZ).strftime("%H:%M")
 
         # 有新增时的通知内容
         if total_new > 0:
@@ -486,7 +491,7 @@ class JobMonitor:
 
     async def run_async(self, silent_mode: bool = False):
         """执行完整的清单整理流程（异步）"""
-        start_time = datetime.now()
+        start_time = datetime.now(BEIJING_TZ)
         logging.info(f"--- 开始整理 {start_time.strftime('%Y-%m-%d %H:%M:%S')} ---")
         
         # 确保输出目录存在
@@ -523,7 +528,7 @@ class JobMonitor:
         self._send_notification(summary)
         
         # 流程结束
-        end_time = datetime.now()
+        end_time = datetime.now(BEIJING_TZ)
         logging.info(f"--- 整理完成, 耗时: {(end_time - start_time).total_seconds():.2f} 秒 ---")
 
 # --- 3. 主程序入口 ---

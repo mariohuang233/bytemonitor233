@@ -3,8 +3,12 @@ from pymongo import MongoClient, DESCENDING, ASCENDING
 from datetime import datetime, timedelta
 from typing import List, Dict, Optional
 import logging
+import pytz
 
 logger = logging.getLogger(__name__)
+
+# 北京时区
+BEIJING_TZ = pytz.timezone('Asia/Shanghai')
 
 
 class DatabaseService:
@@ -90,8 +94,8 @@ class DatabaseService:
         # 总数
         total = self.items.count_documents({})
         
-        # 今日新增
-        today_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        # 今日新增（使用北京时间）
+        today_start = datetime.now(BEIJING_TZ).replace(hour=0, minute=0, second=0, microsecond=0)
         today_new = self.items.count_documents({
             '采摘时间': {'$gte': today_start}
         })
@@ -134,8 +138,8 @@ class DatabaseService:
     
     def insert_item(self, item: Dict) -> str:
         """插入单个条目"""
-        item['created_at'] = datetime.now()
-        item['updated_at'] = datetime.now()
+        item['created_at'] = datetime.now(BEIJING_TZ)
+        item['updated_at'] = datetime.now(BEIJING_TZ)
         result = self.items.insert_one(item)
         return str(result.inserted_id)
     
@@ -144,7 +148,7 @@ class DatabaseService:
         if not items:
             return 0
         
-        now = datetime.now()
+        now = datetime.now(BEIJING_TZ)
         for item in items:
             item['created_at'] = now
             item['updated_at'] = now
@@ -159,9 +163,9 @@ class DatabaseService:
     
     def upsert_item(self, job_hash: str, item: Dict) -> bool:
         """更新或插入条目"""
-        item['updated_at'] = datetime.now()
+        item['updated_at'] = datetime.now(BEIJING_TZ)
         if 'created_at' not in item:
-            item['created_at'] = datetime.now()
+            item['created_at'] = datetime.now(BEIJING_TZ)
         
         result = self.items.update_one(
             {'job_hash': job_hash},
@@ -178,7 +182,7 @@ class DatabaseService:
     
     def add_sync_log(self, log_data: Dict) -> str:
         """添加同步日志"""
-        log_data['sync_time'] = datetime.now()
+        log_data['sync_time'] = datetime.now(BEIJING_TZ)
         result = self.sync_logs.insert_one(log_data)
         return str(result.inserted_id)
     

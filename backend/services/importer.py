@@ -5,8 +5,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Dict
 import logging
+import pytz
 
 logger = logging.getLogger(__name__)
+
+# 北京时区
+BEIJING_TZ = pytz.timezone('Asia/Shanghai')
 
 
 class DataImporter:
@@ -25,15 +29,21 @@ class DataImporter:
     
     @staticmethod
     def _parse_time(time_str) -> datetime:
-        """解析时间字符串"""
+        """解析时间字符串为北京时间"""
         if isinstance(time_str, datetime):
-            return time_str
+            # 如果已经是datetime对象，确保有时区信息
+            if time_str.tzinfo is None:
+                # 假设无时区的datetime是北京时间
+                return BEIJING_TZ.localize(time_str)
+            return time_str.astimezone(BEIJING_TZ)
         if isinstance(time_str, str):
             try:
-                return datetime.strptime(time_str, '%Y-%m-%d %H:%M:%S')
+                # 解析字符串为datetime，假设是北京时间
+                dt = datetime.strptime(time_str, '%Y-%m-%d %H:%M:%S')
+                return BEIJING_TZ.localize(dt)
             except:
-                return datetime.now()
-        return datetime.now()
+                return datetime.now(BEIJING_TZ)
+        return datetime.now(BEIJING_TZ)
     
     def import_from_json(self, clear_existing: bool = False) -> Dict:
         """从JSON文件导入数据"""

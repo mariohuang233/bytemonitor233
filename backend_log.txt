@@ -31,3 +31,67 @@
 2025-10-21 16:46:57,341 - __main__ - INFO - 启动Flask服务器...
 2025-10-21 16:46:57,379 - werkzeug - WARNING -  * Debugger is active!
 2025-10-21 16:46:57,396 - werkzeug - INFO -  * Debugger PIN: 807-792-011
+2025-10-21 17:40:47,922 - werkzeug - INFO -  * Detected change in '/Users/huangjiawei/Downloads/paquzijie/backend/services/importer.py', reloading
+2025-10-21 17:40:48,442 - werkzeug - INFO -  * Restarting with stat
+2025-10-21 17:40:50,806 - __main__ - INFO - 连接MongoDB: mongodb+srv://byte123:fXb39P2JDuJA6U8S@yierbubu.aha67vc.mongodb.net/?retryWrites=true&w=majority&appName=yierbubu
+2025-10-21 17:40:52,360 - __main__ - INFO - Flask应用初始化完成
+2025-10-21 17:40:52,361 - __main__ - INFO - 启动Flask服务器...
+2025-10-21 17:40:52,499 - werkzeug - WARNING -  * Debugger is active!
+2025-10-21 17:40:52,521 - werkzeug - INFO -  * Debugger PIN: 807-792-011
+2025-10-21 17:40:59,573 - werkzeug - INFO -  * Detected change in '/Users/huangjiawei/Downloads/paquzijie/backend/routes/sync.py', reloading
+2025-10-21 17:41:00,105 - werkzeug - INFO -  * Restarting with stat
+2025-10-21 17:41:00,663 - __main__ - INFO - 连接MongoDB: mongodb+srv://byte123:fXb39P2JDuJA6U8S@yierbubu.aha67vc.mongodb.net/?retryWrites=true&w=majority&appName=yierbubu
+2025-10-21 17:41:01,515 - __main__ - INFO - Flask应用初始化完成
+2025-10-21 17:41:01,515 - __main__ - INFO - 启动Flask服务器...
+2025-10-21 17:41:01,550 - werkzeug - WARNING -  * Debugger is active!
+2025-10-21 17:41:01,569 - werkzeug - INFO -  * Debugger PIN: 807-792-011
+2025-10-21 17:41:02,583 - werkzeug - INFO -  * Detected change in '/Users/huangjiawei/Downloads/paquzijie/backend/routes/sync.py', reloading
+2025-10-21 17:41:02,984 - werkzeug - INFO -  * Restarting with stat
+2025-10-21 17:41:03,509 - __main__ - INFO - 连接MongoDB: mongodb+srv://byte123:fXb39P2JDuJA6U8S@yierbubu.aha67vc.mongodb.net/?retryWrites=true&w=majority&appName=yierbubu
+2025-10-21 17:41:04,297 - __main__ - INFO - Flask应用初始化完成
+2025-10-21 17:41:04,297 - __main__ - INFO - 启动Flask服务器...
+2025-10-21 17:41:04,329 - werkzeug - WARNING -  * Debugger is active!
+2025-10-21 17:41:04,346 - werkzeug - INFO -  * Debugger PIN: 807-792-011
+2025-10-21 17:41:15,419 - werkzeug - INFO -  * Detected change in '/Users/huangjiawei/Downloads/paquzijie/backend/app.py', reloading
+2025-10-21 17:41:15,851 - werkzeug - INFO -  * Restarting with stat
+2025-10-21 17:41:16,731 - __main__ - INFO - 连接MongoDB: mongodb+srv://byte123:fXb39P2JDuJA6U8S@yierbubu.aha67vc.mongodb.net/?retryWrites=true&w=majority&appName=yierbubu
+2025-10-21 17:41:17,548 - __main__ - INFO - Flask应用初始化完成
+2025-10-21 17:41:17,548 - __main__ - INFO - 启动Flask服务器...
+2025-10-21 17:41:17,610 - werkzeug - WARNING -  * Debugger is active!
+2025-10-21 17:41:17,625 - werkzeug - INFO -  * Debugger PIN: 807-792-011
+2025-10-21 17:41:29,707 - werkzeug - INFO -  * Detected change in '/Users/huangjiawei/Downloads/paquzijie/backend/app.py', reloading
+2025-10-21 17:41:30,188 - werkzeug - INFO -  * Restarting with stat
+2025-10-21 17:41:30,791 - __main__ - INFO - 连接MongoDB: mongodb+srv://byte123:fXb39P2JDuJA6U8S@yierbubu.aha67vc.mongodb.net/?retryWrites=true&w=majority&appName=yierbubu
+2025-10-21 17:41:31,640 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-10-21 17:41:31,648 - apscheduler.scheduler - INFO - Added job "定时爬取任务" to job store "default"
+2025-10-21 17:41:31,648 - apscheduler.scheduler - INFO - Scheduler started
+2025-10-21 17:41:31,648 - __main__ - INFO - ✅ 定时调度器已启动，每30分钟执行一次爬取任务
+2025-10-21 17:41:31,651 - __main__ - INFO - Flask应用初始化完成
+2025-10-21 17:41:31,651 - __main__ - INFO - 启动Flask服务器...
+2025-10-21 17:41:31,689 - werkzeug - WARNING -  * Debugger is active!
+2025-10-21 17:41:31,707 - werkzeug - INFO -  * Debugger PIN: 807-792-011
+2025-10-21 17:41:33,727 - werkzeug - INFO -  * Detected change in '/Users/huangjiawei/Downloads/paquzijie/backend/app.py', reloading
+2025-10-21 17:41:34,276 - werkzeug - INFO -  * Restarting with stat
+2025-10-21 17:41:34,748 - __main__ - INFO - 连接MongoDB: mongodb+srv://byte123:fXb39P2JDuJA6U8S@yierbubu.aha67vc.mongodb.net/?retryWrites=true&w=majority&appName=yierbubu
+2025-10-21 17:41:35,551 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-10-21 17:41:35,552 - apscheduler.scheduler - INFO - Added job "定时爬取任务" to job store "default"
+2025-10-21 17:41:35,552 - apscheduler.scheduler - INFO - Scheduler started
+2025-10-21 17:41:35,552 - __main__ - INFO - ✅ 定时调度器已启动，每30分钟执行一次爬取任务
+2025-10-21 17:41:35,554 - __main__ - INFO - Flask应用初始化完成
+2025-10-21 17:41:35,554 - __main__ - INFO - 启动Flask服务器...
+2025-10-21 17:41:35,579 - werkzeug - WARNING -  * Debugger is active!
+2025-10-21 17:41:35,595 - werkzeug - INFO -  * Debugger PIN: 807-792-011
+2025-10-21 17:42:12,851 - werkzeug - INFO -  * Detected change in '/Users/huangjiawei/Downloads/paquzijie/backend/services/db.py', reloading
+2025-10-21 17:42:12,852 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-10-21 17:42:12,852 - __main__ - INFO - 定时调度器已关闭
+Exception ignored in atexit callback <function shutdown_scheduler at 0x105367100>:
+Traceback (most recent call last):
+  File "/Users/huangjiawei/Downloads/paquzijie/backend/app.py", line 185, in shutdown_scheduler
+    scheduler.shutdown()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/apscheduler/schedulers/background.py", line 40, in shutdown
+    super().shutdown(*args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/apscheduler/schedulers/blocking.py", line 22, in shutdown
+    super().shutdown(wait)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/apscheduler/schedulers/base.py", line 232, in shutdown
+    raise SchedulerNotRunningError
+apscheduler.schedulers.SchedulerNotRunningError: Scheduler is not running
