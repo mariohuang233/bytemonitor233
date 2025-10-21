@@ -45,8 +45,11 @@ RUN apt-get update && apt-get install -y \
 COPY backend/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 安装Playwright浏览器
-RUN playwright install chromium --with-deps
+# 安装Playwright浏览器（重要：必须在安装playwright包之后）
+# 使用--with-deps确保系统依赖也被安装
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+RUN playwright install chromium
+RUN playwright install-deps chromium
 
 # 复制后端代码
 COPY backend/ ./
@@ -62,6 +65,8 @@ ENV PYTHONPATH=/app
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 ENV CRAWLER_SCRIPT_PATH=/app/1.py
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=0
 
 # 暴露端口
 EXPOSE 5000
