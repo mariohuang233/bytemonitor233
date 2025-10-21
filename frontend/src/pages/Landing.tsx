@@ -7,8 +7,6 @@ import { Row, Col, Input, Button, Card, Statistic, Avatar, Typography, Space } f
 import {
   SearchOutlined,
   RiseOutlined,
-  TeamOutlined,
-  CheckCircleOutlined,
   ArrowRightOutlined,
 } from '@ant-design/icons';
 import { getStats, getItems, type SpongeItem } from '../services/api';
