@@ -147,3 +147,14 @@ backend_log.txt
 
 # Cache files (from crawler)
 bytedance_jobs_cache.json
+
+# Local monitor runtime and cloud build output
+data/
+exports/
+outputs/
+public/
+.publish/
+github_publish_admin.py
+*.lnk
+recruitment_*_data.json
+*.zip

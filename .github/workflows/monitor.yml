@@ -1,0 +1,84 @@
+name: Collect jobs and publish Pages
+
+on:
+  schedule:
+    # UTC 02:00,08:00,14:00 = 北京时间 10:00,16:00,22:00。
+    - cron: '0 2,8,14 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'collector.py'
+      - 'job_dashboard.py'
+      - 'cloud_pipeline.py'
+      - 'web/**'
+      - 'state/**'
+      - 'requirements-cloud.txt'
+      - '.github/workflows/monitor.yml'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: cloud-job-monitor
+  cancel-in-progress: false
+
+jobs:
+  collect-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      TZ: Asia/Shanghai
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-cloud.txt
+      - name: Install crawler
+        run: |
+          python -m pip install -r requirements-cloud.txt
+          python -m playwright install --with-deps chromium
+      - name: Verify pagination, city filters and snapshot recovery
+        run: python -m unittest test_city_collection test_cloud_pipeline -v
+      - name: Collect all cities and build static site
+        id: collect
+        run: python cloud_pipeline.py run
+      - name: Save data snapshot to GitHub
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add state/monitor.json.gz
+          if ! git diff --cached --quiet; then
+            git commit -m 'data: update jobs and change history [skip ci]'
+            git push
+          fi
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Preserve failure screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: crawler-diagnostics
+          path: data/artifacts/
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Report complete collection failure
+        if: steps.collect.outputs.all_failed == 'true'
+        run: |
+          echo '::error::All job sources failed; the previous dataset has been preserved.'
+          exit 1

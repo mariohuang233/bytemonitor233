@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>招聘职位 · 本地数据管理台</title>
+  <link rel="stylesheet" href="/styles.css?v=20261019-cities">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">职</span>
+        <div><strong>招聘职位</strong><small>LOCAL MONITOR</small></div>
+      </div>
+      <nav aria-label="主导航">
+        <button class="nav-item active" data-view="jobs">职位浏览</button>
+        <button class="nav-item" data-view="changes">变化记录</button>
+        <button class="nav-item" data-view="runs">运行历史</button>
+        <button class="nav-item" data-view="settings">定时设置</button>
+      </nav>
+      <div class="sidebar-foot">
+        <span class="status-dot"></span>
+        <div><strong>本机数据库</strong><small id="db-status">正在连接</small></div>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">数据概览</p>
+          <h1 id="page-title">职位浏览</h1>
+        </div>
+        <div class="top-actions">
+          <button id="export-xlsx" class="secondary">导出 Excel</button>
+          <button id="export-json" class="secondary">导出 JSON</button>
+          <button id="run-now" class="primary">立即采集</button>
+        </div>
+      </header>
+
+      <section id="summary" class="summary-grid" aria-label="数据摘要">
+        <article class="metric feature"><span>当前有效职位</span><strong id="total-count">--</strong><small id="last-run">尚无运行记录</small></article>
+        <article class="metric"><span>实习招聘</span><strong id="intern-count">--</strong><small>当前有效岗位</small></article>
+        <article class="metric"><span>校园招聘</span><strong id="campus-count">--</strong><small>当前有效岗位</small></article>
+        <article class="metric"><span>社会招聘</span><strong id="experienced-count">--</strong><small>当前有效岗位</small></article>
+        <article class="metric"><span>近 7 日变化</span><strong id="changed-count">--</strong><small>新增、更新与下架</small></article>
+      </section>
+
+      <section id="jobs-view" class="view active">
+        <div class="toolbar">
+          <label class="search"><span class="sr-only">搜索职位</span><input id="search" type="search" placeholder="搜索职位、城市、部门或类别"></label>
+          <select id="type-filter" aria-label="职位类型">
+            <option value="all">全部类型</option><option value="intern">实习招聘</option>
+            <option value="campus">校园招聘</option><option value="experienced">社会招聘</option>
+          </select>
+          <select id="city-filter" aria-label="工作城市">
+            <option value="">全部城市</option>
+          </select>
+          <select id="status-filter" aria-label="职位状态">
+            <option value="active">有效职位</option><option value="dropped">已下架</option><option value="all">全部状态</option>
+          </select>
+          <select id="sort-field" aria-label="排序字段">
+            <option value="updated_at">按信息更新时间</option>
+            <option value="publish_time">按发布时间</option>
+            <option value="job_name">按岗位名</option>
+            <option value="team_name">按团队</option>
+            <option value="source_type">按招聘类型</option>
+            <option value="city">按城市</option>
+            <option value="is_active">按状态</option>
+          </select>
+          <select id="sort-direction" aria-label="排序方向">
+            <option value="desc">降序</option><option value="asc">升序</option>
+          </select>
+          <span id="result-count" class="result-count">加载中</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th><button class="sort-button" data-sort="job_name">岗位名</button></th>
+              <th><button class="sort-button" data-sort="team_name">团队</button></th>
+              <th><button class="sort-button" data-sort="source_type">类型</button></th>
+              <th><button class="sort-button" data-sort="city">城市</button></th>
+              <th><button class="sort-button" data-sort="publish_time">发布时间</button></th>
+              <th><button class="sort-button active" data-sort="updated_at">信息更新时间 <span>↓</span></button></th>
+              <th><button class="sort-button" data-sort="is_active">状态</button></th>
+              <th>链接</th>
+            </tr></thead>
+            <tbody id="jobs-body"></tbody>
+          </table>
+          <div id="empty-state" class="empty hidden"><strong>没有找到匹配的数据</strong><span>尝试调整搜索词或筛选条件。</span></div>
+        </div>
+        <div class="pagination"><button id="prev-page">上一页</button><span id="page-info">第 1 页</span><button id="next-page">下一页</button></div>
+      </section>
+
+      <section id="changes-view" class="view">
+        <div class="section-head"><div><h2>变化记录</h2><p>每次同步发现的新增、内容更新、重新上线和下架都会留痕。</p></div></div>
+        <div id="changes-list" class="timeline"></div>
+      </section>
+
+      <section id="runs-view" class="view">
+        <div class="section-head"><div><h2>运行历史</h2><p>查看每次手动或定时采集的结果及失败原因。</p></div></div>
+        <div class="table-wrap"><table><thead><tr><th>开始时间</th><th>状态</th><th>新增</th><th>更新</th><th>下架</th><th>说明</th></tr></thead><tbody id="runs-body"></tbody></table></div>
+      </section>
+
+      <section id="settings-view" class="view">
+        <div class="settings-layout">
+          <div class="section-head"><div><h2>定时采集</h2><p>管理台保持运行时，系统会按此计划自动启动爬虫并同步数据库。</p></div></div>
+          <form id="schedule-form">
+            <label class="switch-row"><span><strong>启用自动采集</strong><small>保存后立即生效</small></span><input id="schedule-enabled" type="checkbox" role="switch"></label>
+            <div class="form-grid">
+              <label><span>运行方式</span><select id="schedule-mode"><option value="daily">每天</option><option value="weekly">每周指定日期</option><option value="interval">按间隔</option></select></label>
+              <label id="time-field"><span>运行时间</span><input id="schedule-time" type="time" value="09:00"></label>
+              <label id="interval-field" class="hidden"><span>间隔分钟数</span><input id="schedule-interval" type="number" min="5" max="10080" value="60"></label>
+            </div>
+            <fieldset id="weekday-field" class="hidden"><legend>运行日期</legend><div class="weekdays">
+              <label><input type="checkbox" value="0">一</label><label><input type="checkbox" value="1">二</label>
+              <label><input type="checkbox" value="2">三</label><label><input type="checkbox" value="3">四</label>
+              <label><input type="checkbox" value="4">五</label><label><input type="checkbox" value="5">六</label>
+              <label><input type="checkbox" value="6">日</label>
+            </div></fieldset>
+            <div class="form-actions"><button type="submit" class="primary">保存计划</button><button type="button" id="test-notification" class="secondary">发送测试通知</button><span id="save-feedback"></span></div>
+          </form>
+          <div class="notification-settings">
+            <div class="section-head"><div><h2>通知策略</h2><p>使用非阻塞 Windows 通知，失败时自动保留弹窗兼容方案。</p></div></div>
+            <form id="notification-form">
+              <label class="check-row"><input id="notify-changes" type="checkbox"><span><strong>数据发生变化时通知</strong><small>新增、字段更新、重新上线或下架</small></span></label>
+              <label class="check-row"><input id="notify-failures" type="checkbox"><span><strong>采集失败时通知</strong><small>包括部分分类连续重试失败</small></span></label>
+              <label class="check-row"><input id="notify-success" type="checkbox"><span><strong>无变化也通知</strong><small>每次成功完成均发送结果</small></span></label>
+              <div class="form-actions"><button type="submit" class="primary">保存通知策略</button></div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="job-dialog">
+    <button class="dialog-close" aria-label="关闭详情">×</button>
+    <div id="job-detail"></div>
+  </dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js?v=20261019-cities"></script>
+</body>
+</html>
